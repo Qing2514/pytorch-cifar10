@@ -1,7 +1,7 @@
 # pytorch-cifar10
 
 文件 | 作用
----: | :---
+:--- | :---
 train.py | 训练图像分类模型
 test.py | 测试模型
 viewBatch.py | 查看数据集
