@@ -26,17 +26,36 @@ class Model(nn.Module):
 
 
 images = ['image/0-plane.png',
+          'image/0-plane2.png',
+          'image/0-plane3.png',
           'image/1-automobile.png',
+          'image/1-automobile2.png',
+          'image/1-automobile3.png',
           'image/2-bird.png',
           'image/2-bird2.png',
+          'image/2-bird3.png',
           'image/3-cat.png',
           'image/3-cat2.png',
+          'image/3-cat3.png',
           'image/4-deer.png',
+          'image/4-deer2.png',
+          'image/4-deer3.png',
           'image/5-dog.png',
+          'image/5-dog2.png',
+          'image/5-dog3.png',
           'image/6-frog.png',
+          'image/6-frog2.png',
+          'image/6-frog3.png',
           'image/7-horse.png',
+          'image/7-horse2.png',
+          'image/7-horse3.png',
           'image/8-ship.png',
-          'image/9-truck.png']
+          'image/8-ship2.png',
+          'image/8-ship3.png',
+          'image/9-truck.png',
+          'image/9-truck2.png',
+          'image/9-truck3.png']
+
 
 for i in range(len(images)):
     #  原图片是ARGB类型，四通道，而我们的训练模式都是三通道的，所以这里转换成RGB三通道的格式
@@ -49,7 +68,7 @@ for i in range(len(images)):
     image = transform(image)
     image = torch.reshape(image, (1, 3, 32, 32))
 
-    model = torch.load('./model/model_51.pth')
+    model = torch.load('./model/model.pth')
     model.eval()
     with torch.no_grad():
         image = image

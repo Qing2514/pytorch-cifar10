@@ -22,11 +22,11 @@ class Model(nn.Module):
         return x
 
 
-# print(Model())  # 查看网络模型结构
-content = torch.load('./model/best_model.pth')
+print(Model())  # 查看网络模型结构
+# content = torch.load('./model/best_model.pth')
 # content = torch.load('./model/model.pth')
 # content = torch.load('./checkpoint/ckpt.pth')
-print(content.keys())  # 输出模型中的key
-print(content)  # 输出模型所有数据
+# print(content.keys())  # 输出模型中的key
+# print(content)  # 输出模型所有数据
 # 之后有其他需求比如要看 key 为 model 的内容有啥
 # print(content['best_acc'])

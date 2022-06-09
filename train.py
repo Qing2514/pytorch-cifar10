@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 import torchvision.transforms as transforms
 
+from res import ResNet34
 
 transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
@@ -12,12 +13,13 @@ transform_train = transforms.Compose([
     # 对RGB图片而言，数据范围是[0-255]，将数据归一化到[0,1]（是将数据除以255）
     transforms.ToTensor(),
     # 对数据按通道进行标准化，即减去均值，再除以方差，可以加快模型的收敛速度
-    transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    # transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ])
 
 transform_test = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ])
 
 # 准备数据集
@@ -40,7 +42,7 @@ class Model(nn.Module):
         super(Model, self).__init__()
         self.model = nn.Sequential(  # 顺序模型
             nn.Conv2d(3, 32, 5, 1, 2),  # 2d卷积，输入通道数3，输出通道数为32，卷积核为5x5大小
-            nn.MaxPool2d(2),    # 最大池化层
+            nn.MaxPool2d(2),  # 最大池化层
             nn.Conv2d(32, 32, 5, 1, 2),
             nn.MaxPool2d(2),
             nn.Conv2d(32, 64, 5, 1, 2),
@@ -56,7 +58,9 @@ class Model(nn.Module):
 
 
 # 创建网络模型
-model = Model()
+# model = Model()
+model = torch.load('./model/model.pth')
+# model = ResNet34()
 
 # 添加tensorboard可视化数据
 writer = SummaryWriter('logs')
@@ -67,11 +71,11 @@ loss = nn.CrossEntropyLoss()
 # 优化器：随机梯度下降优化器（是包含动量部分的）
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
-i = 1  # 记录次数，用于绘制tensorboard测试集的横坐标
+i = 16  # 记录次数，用于绘制tensorboard测试集的横坐标
 best_acc = 0  # 记录最佳正确率
 
 # 开始循环训练
-for epoch in range(300):
+for epoch in range(15, 300):
     print('开始第{}轮训练'.format(epoch))
     model.train()
     for data in train_dataloader:
@@ -112,12 +116,7 @@ for epoch in range(300):
 
     if acc > best_acc:
         best_acc = acc
-        torch.save({
-            'epoch': epoch,
-            'acc': best_acc,
-            'sum_loss': sum_loss,
-            'model': model.state_dict(),
-        }, './model/best_model.pth')
+        torch.save(model, './model/best_model.pth')
         torch.save(model, './model/model.pth')
         print("第{}轮模型训练数据已保存".format(epoch))
 
